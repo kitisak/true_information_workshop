@@ -79,7 +79,13 @@ public class RecipeActivityTest {
 
     @Test public void
     already_favorited_recipe(){
+        favortite.put("1", true);
 
+        Intent intent = new Intent();
+        intent.putExtra("id", "1");
+        activityTestRule.launchActivity(intent);
+
+        onView(withId(R.id.title)).check(matches(isSelected()));
     }
 
 
