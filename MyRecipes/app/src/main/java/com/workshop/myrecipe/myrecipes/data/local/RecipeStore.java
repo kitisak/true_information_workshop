@@ -14,6 +14,9 @@ public class RecipeStore {
     }
 
     public Recipe getRecipe(String id) {
+        if(id == null) {
+            return null;
+        }
         return new Recipe(id, "Title" + id, "Description");
     }
 }
