@@ -10,7 +10,8 @@ public class SharedPreferencesFavorites implements Favorite {
     private final SharedPreferences pref;
 
     public SharedPreferencesFavorites(Context context) {
-        pref = context.getSharedPreferences("favorite", Context.MODE_PRIVATE);
+        pref = context.getSharedPreferences("favorite"
+                , Context.MODE_PRIVATE);
     }
 
     @Override

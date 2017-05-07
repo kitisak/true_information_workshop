@@ -7,14 +7,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.workshop.myrecipe.myrecipes.R;
-import com.workshop.myrecipe.myrecipes.data.local.RecipeStore;
 import com.workshop.myrecipe.myrecipes.data.model.Recipe;
 import com.workshop.myrecipe.myrecipes.injection.RecipeApplication;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity
+implements RecipePresenter.RecipeView {
 
     private TextView titleTextView;
     private TextView descriptionTextView;
+    private RecipeApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,28 +25,37 @@ public class RecipeActivity extends AppCompatActivity {
         titleTextView = (TextView)findViewById(R.id.title);
         descriptionTextView = (TextView)findViewById(R.id.description);
 
-        final RecipeApplication application = (RecipeApplication) getApplication();
+        application = (RecipeApplication) getApplication();
 
-        Intent intent = getIntent();
-        RecipeStore store = new RecipeStore();
-        final Recipe recipe = store.getRecipe(intent.getStringExtra("id"));
-        if(recipe == null){
-            titleTextView.setVisibility(View.GONE);
-            descriptionTextView.setText("Recipe not found");
-        } else {
-            titleTextView.setText(recipe.getTitle());
-            descriptionTextView.setText(recipe.getDescription());
-            titleTextView.setSelected(application.getFavorite().get(recipe.getId()));
-        }
+        final Intent intent = getIntent();
+
+        //Step 1 :: Load recipe by id
+        final RecipePresenter recipePresenter = new RecipePresenter(this, application.getFavorite());
+        recipePresenter.loadData(intent.getStringExtra("id"));
+
 
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(recipe == null) {
-                    throw new IllegalStateException("Must load before !!");
-                }
-                titleTextView.setSelected(application.getFavorite().toggle(recipe.getId()));
+                recipePresenter.toggle(intent.getStringExtra("id"));
             }
         });
+    }
+
+    @Override
+    public void showRecipe(Recipe recipe){
+        titleTextView.setText(recipe.getTitle());
+        descriptionTextView.setText(recipe.getDescription());
+    }
+
+    @Override
+    public void showRecipeNotFound(){
+        titleTextView.setVisibility(View.GONE);
+        descriptionTextView.setText("Recipe not found");
+    }
+
+    @Override
+    public void showFavorite(boolean isFavorite) {
+        titleTextView.setSelected(isFavorite);
     }
 }

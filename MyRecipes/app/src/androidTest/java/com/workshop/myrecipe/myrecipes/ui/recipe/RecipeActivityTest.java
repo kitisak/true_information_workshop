@@ -35,13 +35,15 @@ public class RecipeActivityTest {
     @Before
     public void clearAllFavorite(){
         TestRecipeApplication application =(TestRecipeApplication)
-                InstrumentationRegistry.getTargetContext().getApplicationContext();
+                InstrumentationRegistry
+                        .getTargetContext()
+                        .getApplicationContext();
         favortite = (InMemoryFavortite) application.getFavorite();
         favortite.clear();
     }
 
     @Test public void
-    found_receipe(){
+    found_recipe(){
         Intent intent = new Intent();
         intent.putExtra("id", "1");
         activityTestRule.launchActivity(intent);
