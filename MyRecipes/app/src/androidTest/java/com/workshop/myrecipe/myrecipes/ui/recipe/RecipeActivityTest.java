@@ -13,8 +13,10 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isSelected;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -62,7 +64,17 @@ public class RecipeActivityTest {
 
     @Test public void
     click_to_favorite_recipe(){
+        Intent intent = new Intent();
+        intent.putExtra("id", "1");
+        activityTestRule.launchActivity(intent);
 
+        onView(withId(R.id.title))
+                .check(matches(withText("Title1")))
+                .check(matches(not(isSelected())));
+
+        onView(withId(R.id.title)).perform(click());
+
+        onView(withId(R.id.title)).check(matches(isSelected()));
     }
 
     @Test public void
