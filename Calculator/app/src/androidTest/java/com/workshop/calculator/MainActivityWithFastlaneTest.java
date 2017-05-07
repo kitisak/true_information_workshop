@@ -14,6 +14,7 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -34,7 +35,8 @@ public class MainActivityWithFastlaneTest {
 
     @BeforeClass
     public static void beforeAll() {
-        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
+        Screengrab.setDefaultScreenshotStrategy(
+                new UiAutomatorScreenshotStrategy());
     }
 
     @Test public void
@@ -47,7 +49,7 @@ public class MainActivityWithFastlaneTest {
                 .perform(typeText("1"));
 
         onView(withId(R.id.operand2))
-                .perform(typeText("2"));
+                .perform(typeText("2"), closeSoftKeyboard());
 
         Screengrab.screenshot("step_02");
 
